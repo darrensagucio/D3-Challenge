@@ -31,7 +31,7 @@ d3.csv("assets/data/data.csv").then(function(healthCareData) {
         count ++;
     });
 
-    console.log(`Number Of States: ${count}`)
+    console.log(`Number Of States: ${count}`) 
     // Create scale functions 
     var xLinearScale = d3.scaleLinear()
         .domain([d3.min(healthCareData, hcd => hcd.poverty) - 1, d3.max(healthCareData, hcd => hcd.poverty) + 2])

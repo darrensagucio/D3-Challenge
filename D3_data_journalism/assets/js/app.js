@@ -22,15 +22,16 @@ var chartGroup = svg.append("g")
 // Import Data
 d3.csv("assets/data/data.csv").then(function(healthCareData) {
     var count = 0;
+    console.log("States:")
+
     healthCareData.forEach(function(data) {
         data.poverty = +data.poverty;
         data.healthcare = +data.healthcare;
-        data.smokes = +data.smokes;
         console.log(data.abbr);
         count ++;
     });
 
-    console.log(count)
+    console.log(`Number Of States: ${count}`)
     // Create scale functions 
     var xLinearScale = d3.scaleLinear()
         .domain([d3.min(healthCareData, hcd => hcd.poverty) - 1, d3.max(healthCareData, hcd => hcd.poverty) + 2])
@@ -50,7 +51,7 @@ d3.csv("assets/data/data.csv").then(function(healthCareData) {
     chartGroup.append("g")
         .call(leftAxis);
 
-    console.log("it works")
+    console.log("Creating Scatter Plot")
 
     var circlesGroup = chartGroup.selectAll("circle")
     .data(healthCareData)
@@ -82,59 +83,10 @@ d3.csv("assets/data/data.csv").then(function(healthCareData) {
         .text("Lacks Healthcare(%)");
 
     chartGroup.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left + 10)
-        .attr("x", 0 - (height / 2.5))
-        .attr("dy", "1em")
-        .attr("class", "axisText")
-        .attr("id", "secondYLabel")
-        .text("Smokes(%)");
-
-    chartGroup.append("text")
         .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
         .attr("class", "axisText")
         .attr("id", "firstXLabel")
         .text("In Poverty(%)")
-
-    chartGroup.append("text")
-        .attr("transform", `translate(${width / 2}, ${height + margin.top + 50})`)
-        .attr("class", "axisText")
-        .attr("id", "secondXLabel")
-        .text("Age(Median)");
-
-    d3.select("#firstYLabel").on("click", function(){
-        console.log("yo");
-        // d3.select(this).text("Lacks Healthcare(%)");
-    })
-    
-    d3.select("#firstXLabel").on("click", function(){
-        console.log("it works");
-        // d3.select(this).text("Lacks Healthcare(%)");
-    })
-
-    d3.select("#secondYLabel").on("click", function(){
-        console.log("it works");
-
-        xLinearScale = d3.scaleLinear()
-            .domain([d3.min(healthCareData, hcd => hcd.poverty) - 1, d3.max(healthCareData, hcd => hcd.poverty) + 2])
-            .range([0, width]);
-    
-        yLinearScale = d3.scaleLinear()
-            .transition()
-            .domain([d3.min(healthCareData, hcd => hcd.smokes) - .5, d3.max(healthCareData, hcd => hcd.smokes) + 3])
-            .range([height, 0]);
-
-        bottomAxis = d3.axisBottom(xLinearScale);
-        leftAxis = d3.axisLeft(yLinearScale);
-
-        chartGroup.append("g")
-            .attr("transform", `translate(0, ${height})`)
-            .call(bottomAxis);
-
-        chartGroup.append("g")
-            .call(leftAxis);
-
-    })
 
 }).catch(function(error) {
     console.log(error);
